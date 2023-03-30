@@ -26,7 +26,7 @@ function Chat({ sendMessage, allMessages, message, joinRoom }) {
       hasMounted.current = true;
       joinRoom(name, room);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <main className="grid grid-cols-[200px_1fr]">
@@ -74,7 +74,7 @@ function ChatBox({ sendMessage, allMessages }) {
       {JSON.stringify(allMessages)}
       <div className="grid grid-rows-[1fr_auto] p-2.5 h-screen">
         <ul className=" py-5 space-y-3 overflow-y-auto">
-          {allMessages.map((msg, i) => {
+          {allMessages?.map((msg, i) => {
             return (
               <li className="block" key={i}>
                 <div className="">

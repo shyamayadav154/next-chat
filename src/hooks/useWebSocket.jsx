@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import io from "Socket.IO-client";
+import io from "socket.io-client";
 
 const useWebSocket = () => {
   const [socket, setSocket] = useState(null);
