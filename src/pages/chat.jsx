@@ -1,5 +1,6 @@
 import Avatar from "@/components/Avatar";
 import dayjs from "dayjs";
+import Head from "next/head";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -34,10 +35,16 @@ function Chat({ sendMessage, allMessages, joinRoom, roomData }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
+    <>
+    <Head>
+        <title>Chat</title>
+    </Head>
+
     <main className="grid grid-cols-[200px_1fr]">
       <ChatSidebar roomData={roomData} />
       <ChatBox allMessages={allMessages} sendMessage={sendMessage} />
     </main>
+    </>
   );
 }
 
@@ -48,7 +55,7 @@ function ChatSidebar({ roomData }) {
   return (
     <section className="bg-indigo-600 text-white h-screen py-2.5 space-y-1">
       <div className="pl-1 text-sm">
-        You are in room <span className="font-medium">{roomData?.room}</span>
+        You are in room <span className="font-bold">{roomData?.room}</span>
       </div>
       <article className="">
         <div className="pl-1 text-sm">User(s) present in room:</div>

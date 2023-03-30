@@ -40,7 +40,7 @@ const handler = nc({
         socket.broadcast.to(user.room).emit("receive-message", {
           id: socket.id,
           name: "admin",
-          message: `${user.name} has joined the room from broadcast`,
+          message: `${user.name} has joined the room`,
         });
 
         io.to(user.room).emit("room-data", {

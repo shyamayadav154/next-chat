@@ -1,5 +1,6 @@
 import FormInput from "@/components/FormInput";
 import useWebSocket from "@/hooks/useWebSocket";
+import Head from "next/head";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -43,6 +44,11 @@ function JoinRoomForm() {
   }
 
   return (
+    <>
+    <Head>
+      <title>Join</title>
+    </Head>
+
     <main className="h-screen  bg-slate-900  w-screen grid place-content-center">
       <section className="border-2 w-[350px] rounded-xl bg-slate-100 p-5">
         <h1 className="font-bold text-3xl ">Join</h1>
@@ -69,5 +75,6 @@ function JoinRoomForm() {
         </button>
       </section>
     </main>
+    </>
   );
 }
