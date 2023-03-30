@@ -44,18 +44,19 @@ function Chat({ sendMessage, allMessages, joinRoom, roomData }) {
 export default Chat;
 
 function ChatSidebar({ roomData }) {
+  if (!roomData) return null;
   return (
     <section className="bg-indigo-600 text-white h-screen py-2.5 space-y-1">
-      <div className="pl-1">
-        You are in room <span className="font-bold">{roomData.room}</span>
+      <div className="pl-1 text-sm">
+        You are in room <span className="font-medium">{roomData?.room}</span>
       </div>
-      <article>
-        <div className="pl-1">User(s) present in room:</div>
+      <article className="">
+        <div className="pl-1 text-sm">User(s) present in room:</div>
         <div>
-          <ul className="space-y-1">
-            {roomData.users?.map((user, i) => {
+          <ul className="space-y-1 ">
+            {roomData?.users?.map((user, i) => {
               return (
-                <li className="py-1.5 bg-indigo-500 mx-1 rounded px-2" key={i}>
+                <li className="py-1.5 bg-indigo-500 mx-1 mt-1 rounded px-2" key={i}>
                   <Avatar name={user.name} />
                   <span className="ml-2">{user.name}</span>
                 </li>
@@ -106,7 +107,7 @@ function ChatBox({ sendMessage, allMessages }) {
   );
 }
 
-function SingleMessage({ msg,name }) {
+function SingleMessage({ msg, name }) {
   return (
     <li className="">
       <div

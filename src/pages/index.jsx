@@ -4,14 +4,14 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-
 import Chat from "./chat";
 
 export default function Home() {
   const searchParams = useSearchParams();
   const name = searchParams.get("name");
   const room = searchParams.get("room");
-  const { sendMessage, joinRoom, allMessages, roomMessages,roomData } = useWebSocket();
+  const { sendMessage, joinRoom, allMessages, roomMessages, roomData } =
+    useWebSocket();
 
   // console.log({ name, room });
 
@@ -51,11 +51,14 @@ function JoinRoomForm() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             label="Display name"
+            autoFocus
+            placeholder="Enter your name"
           />
           <FormInput
             value={room}
             onChange={(e) => setRoom(e.target.value)}
             label="Room"
+            placeholder="Enter room name"
           />
         </article>
         <button
