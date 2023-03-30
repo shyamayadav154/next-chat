@@ -26,6 +26,7 @@ function Chat({ sendMessage, allMessages, message, joinRoom }) {
       hasMounted.current = true;
       joinRoom(name, room);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <main className="grid grid-cols-[200px_1fr]">
@@ -57,7 +58,7 @@ function ChatSidebar() {
   );
 }
 
-function ChatBox({ messages = [], sendMessage, allMessages }) {
+function ChatBox({ sendMessage, allMessages }) {
   const [input, setInput] = useState("");
   const onChangeHandler = (e) => {
     setInput(e.target.value);
