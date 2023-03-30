@@ -4,22 +4,30 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
+
 import Chat from "./chat";
 
 export default function Home() {
   const searchParams = useSearchParams();
   const name = searchParams.get("name");
   const room = searchParams.get("room");
-  const { sendMessage,joinRoom,allMessages } = useWebSocket();
-
+  const { sendMessage, joinRoom, allMessages, roomMessages,roomData } = useWebSocket();
 
   // console.log({ name, room });
-  
+
   if (!name || !room) {
-    return <JoinRoomForm  />;
+    return <JoinRoomForm />;
   }
 
-  return <Chat sendMessage={sendMessage} joinRoom={joinRoom}  allMessages={allMessages} />;
+  return (
+    <Chat
+      sendMessage={sendMessage}
+      joinRoom={joinRoom}
+      roomMessages={roomMessages}
+      allMessages={allMessages}
+      roomData={roomData}
+    />
+  );
 }
 
 function JoinRoomForm() {
@@ -35,7 +43,7 @@ function JoinRoomForm() {
   }
 
   return (
-    <main className="h-screen bg-slate-900  w-screen grid place-content-center">
+    <main className="h-screen  bg-slate-900  w-screen grid place-content-center">
       <section className="border-2 w-[350px] rounded-xl bg-slate-100 p-5">
         <h1 className="font-bold text-3xl ">Join</h1>
         <article className="mt-5  space-y-2.5">

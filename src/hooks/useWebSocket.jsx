@@ -5,11 +5,14 @@ import io from "socket.io-client";
 const useWebSocket = () => {
   const [socket, setSocket] = useState(null);
   const [allMessages, setAllMessages] = useState([]);
+  const [roomMessages, setRoomMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const [roomData, setRoomData] = useState([]);
   const router = useRouter();
 
   // initialize socket
   useEffect(() => {
+    if(socket) return;
     socketInitializer();
     return () => {
         if(socket) socket.disconnect();
@@ -26,6 +29,7 @@ const useWebSocket = () => {
 
     socket.on("message", (msg) => {
       console.log(msg);
+      setRoomMessages((prev) => [...prev, msg]);
     });
 
     socket.on("disconnect", () => {
@@ -38,6 +42,12 @@ const useWebSocket = () => {
       setMessage(msg);
     });
 
+    socket.on("room-data", (roomData) => {
+        console.log(roomData, "room Data");
+        setRoomData(roomData);
+    });
+
+
     return () => {
       socket.disconnect();
     };
@@ -49,11 +59,14 @@ const useWebSocket = () => {
     setSocket(io());
   };
 
-  function sendMessage(message) {
+  function sendMessage(message,name) {
     if (!socket) return;
+    if(!message) return;
     socket.emit("send-message", {
       id: new Date(),
       message,
+      name,
+      timestamp: new Date(),
     });
   }
   let count = 0;
@@ -71,7 +84,7 @@ const useWebSocket = () => {
     
   };
 
-  return { socket, sendMessage, joinRoom, message, allMessages };
+  return { socket, sendMessage, joinRoom, message, allMessages,roomMessages,roomData };
 };
 
 export default useWebSocket;

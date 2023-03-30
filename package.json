@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "dayjs": "^1.11.7",
     "next": "13.2.4",
     "next-connect": "^0.13.0",
     "react": "18.2.0",

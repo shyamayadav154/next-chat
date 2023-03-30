@@ -1,4 +1,4 @@
-import { addUser, getUser, removeUser } from "@/utils/user";
+import { addUser, getUser, getUsersInRoom, removeUser } from "@/utils/user";
 import nc from "next-connect";
 import { Server } from "socket.io";
 import cors from "cors";
@@ -32,31 +32,43 @@ const handler = nc({
         }
         socket.join(user.room);
 
-        socket.emit("message", {
-          user: name,
-          message: `${name} has joined the room for all`,
+        // socket.emit("message", {
+        //   user: name,
+        //   message: `${name} has joined the room for all`,
+        // });
+
+        socket.broadcast.to(user.room).emit("receive-message", {
+          id: socket.id,
+          name: "admin",
+          message: `${user.name} has joined the room from broadcast`,
         });
 
-        socket.broadcast.to(user.room).emit("message", {
-          user: name,
-          message: `${user.name} has joined the room from broadcast`,
+        io.to(user.room).emit("room-data", {
+          room: user.room,
+          users: getUsersInRoom(user.room),
         });
 
         callback();
       });
 
-      socket.on("send-message", (obj) => {
+      socket.on("send-message", (msg) => {
         const user = getUser(socket.id);
-        console.log("Received message", obj);
-        io.to(user.room).emit("receive-message", obj);
+        console.log("Received message", msg);
+        io.to(user.room).emit("receive-message", msg);
       });
 
       socket.on("disconnect", () => {
         const user = removeUser(socket.id);
         if (user) {
-          io.to(user.room).emit("message", {
+          io.to(user.room).emit("receive-message", {
             message: `${user.name} has left the room`,
+            name: "admin",
+            
           });
+            io.to(user.room).emit("room-data", {
+                room: user.room,
+                users: getUsersInRoom(user.room),
+            });
         }
         console.log("User has left");
       });
