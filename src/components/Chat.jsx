@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useScrollOnMessage from "@/hooks/useScrollOnMessage";
+import { PhotoIcon} from "@heroicons/react/24/outline"
 // const useJoinRoom = (name, room) => {
 //   const { socket } = useWebSocket();
 //   const router = useRouter();
@@ -17,7 +18,7 @@ import useScrollOnMessage from "@/hooks/useScrollOnMessage";
 //   }, [name, room,socket]);
 // };
 
-function Chat({ sendMessage, allMessages, joinRoom, roomData }) {
+function Chat({ sendMessage, allMessages, joinRoom, roomData, uploadImage }) {
   const searchParams = useSearchParams();
   const name = searchParams.get("name");
   const room = searchParams.get("room");
@@ -43,7 +44,11 @@ function Chat({ sendMessage, allMessages, joinRoom, roomData }) {
 
       <main className="grid grid-cols-[200px_1fr]">
         <ChatSidebar roomData={roomData} />
-        <ChatBox allMessages={allMessages} sendMessage={sendMessage} />
+        <ChatBox
+          uploadImage={uploadImage}
+          allMessages={allMessages}
+          sendMessage={sendMessage}
+        />
       </main>
     </>
   );
@@ -106,26 +111,55 @@ function ChatBox({ sendMessage, allMessages }) {
     sendMessage(input, name);
     setInput("");
   }
+
+  function fileUpload(e) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      // sendMessage({ file: reader.result, name, id: new Date() });
+      sendMessage(null, name, reader.result);
+    };
+    reader.readAsDataURL(file);
+  }
+
   return (
     <section className="">
       {/* {JSON.stringify(allMessages)} */}
       <div className="grid grid-rows-[1fr_auto] p-2.5 bg-slate-50 h-screen ">
         <div className=" flex flex-col justify-end    overflow-hidden  ">
-          <ul className="overflow-y-auto scrollbar-thin py-5 space-y-2.5" ref={messageRef}>
+          <ul
+            className="overflow-y-auto scrollbar-thin py-5 space-y-2.5"
+            ref={messageRef}
+          >
             {allMessages?.sort(sortByDate).map((msg, i) => (
               <SingleMessage name={name} msg={msg} key={i} />
             ))}
           </ul>
         </div>
-        <form onSubmit={onSubmitHandler} className="flex gap-2">
-          <input
-            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            type="text"
-            placeholder="Type your message"
-            value={input}
-            onChange={onChangeHandler}
-            autoFocus
-          />
+        <form onSubmit={onSubmitHandler} className="flex  gap-2">
+          <div className="relative w-full">
+            <input
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              type="text"
+              placeholder="Type your message"
+              value={input}
+              onChange={onChangeHandler}
+              autoFocus
+            />
+            <div className="absolute right-0 inset-y-0 grid place-content-center px-2 text-sm font-medium">
+              <input
+                accept="image/*"
+                className="invisible absolute w-0"
+                type="file"
+                name="img"
+                id="img"
+                onChange={fileUpload}
+              />
+              <label htmlFor="img">
+                <PhotoIcon className="h-6 w-6 cursor-pointer text-gray-400 hover:text-gray-500" />
+              </label>
+            </div>
+          </div>
           <button className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
             Send
           </button>
@@ -176,6 +210,9 @@ function SingleMessage({ msg, name }) {
           }}
         >
           <div className="pl-4 pt-2 pr-10 pb-6  relative text-sm">
+          {
+            msg.file && <img src={msg.file} alt="" className="w-40" />
+          }
             <span>{msg.message}</span>
             <span className="absolute bottom-1 right-2 text-gray-400 font-medium text-xs">
               {dayjs(msg.timestamp).format("hh:mm a")}

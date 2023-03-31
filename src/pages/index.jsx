@@ -12,7 +12,7 @@ export default function Home() {
   const searchParams = useSearchParams();
   const name = searchParams.get("name");
   const room = searchParams.get("room");
-  const { sendMessage, joinRoom, allMessages, roomMessages, roomData } =
+  const { sendMessage, joinRoom, allMessages, roomMessages, roomData, uploadImage } =
     useWebSocket();
 
   // console.log({ name, room });
@@ -28,6 +28,7 @@ export default function Home() {
       roomMessages={roomMessages}
       allMessages={allMessages}
       roomData={roomData}
+      uploadImage={uploadImage}
     />
   );
 }

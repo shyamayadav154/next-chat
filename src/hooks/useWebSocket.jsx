@@ -74,13 +74,22 @@ const useWebSocket = () => {
     //   socket.emit("typing", data);
     // }
 
-  function sendMessage(message,name) {
+    function uploadImage(data) {
+        if (!socket) return;
+        console.log('belore file')
+        if(!data?.file) return;
+        console.log('after file',data)
+        socket.emit("upload-image", data);
+      }
+
+  function sendMessage(message,name,file) {
     if (!socket) return;
-    if(!message) return;
+    console.log('send message',message,name,file)
     socket.emit("send-message", {
       id: new Date(),
       message,
       name,
+      file,
       timestamp: new Date(),
     });
   }
@@ -99,7 +108,7 @@ const useWebSocket = () => {
     
   };
 
-  return { socket, sendMessage, joinRoom, message, allMessages,roomMessages,roomData };
+  return { socket, sendMessage,uploadImage, joinRoom, message, allMessages,roomMessages,roomData };
 };
 
 export default useWebSocket;

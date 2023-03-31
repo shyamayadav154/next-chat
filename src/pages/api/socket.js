@@ -20,7 +20,11 @@ const handler = nc({
       return;
     }
 
-    const io = new Server(res.socket.server);
+    //create server with maxhttpbuffer size of 5mb
+    const io = new Server(res.socket.server, {
+      maxHttpBufferSize: 5e6,
+    });
+
     res.socket.server.io = io;
 
     io.on("connection", (socket) => {
@@ -56,6 +60,12 @@ const handler = nc({
         console.log("Received message", msg);
         io.to(user.room).emit("receive-message", msg);
       });
+
+      socket.on('upload-image',data=>{
+        const user = getUser(socket.id);
+        console.log('Received image', data);
+        io.to(user.room).emit('receive-message', data);
+      })
 
     //   socket.on('typing', (data) => {
     //     const user = getUser(socket.id);
