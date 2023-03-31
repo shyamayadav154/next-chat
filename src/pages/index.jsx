@@ -6,7 +6,6 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-// import Chat from "./chat";
 
 export default function Home() {
   const searchParams = useSearchParams();
@@ -15,7 +14,6 @@ export default function Home() {
   const { sendMessage, joinRoom, allMessages, roomMessages, roomData, uploadImage } =
     useWebSocket();
 
-  // console.log({ name, room });
 
   if (!name || !room) {
     return <JoinRoomForm />;

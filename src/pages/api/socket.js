@@ -36,10 +36,6 @@ const handler = nc({
         }
         socket.join(user.room);
 
-        // socket.emit("message", {
-        //   user: name,
-        //   message: `${name} has joined the room for all`,
-        // });
 
         socket.broadcast.to(user.room).emit("receive-message", {
           id: socket.id,
@@ -67,11 +63,7 @@ const handler = nc({
         io.to(user.room).emit('receive-message', data);
       })
 
-    //   socket.on('typing', (data) => {
-    //     const user = getUser(socket.id);
-    //     console.log('server typing data: ', data)
-    //     socket.broadcast.to(user.room).emit('typing-data', data);
-    //     });
+    
 
 
       socket.on("disconnect", () => {

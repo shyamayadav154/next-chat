@@ -3,9 +3,8 @@ import dayjs from "dayjs";
 import Head from "next/head";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import useScrollOnMessage from "@/hooks/useScrollOnMessage";
-import { PhotoIcon} from "@heroicons/react/24/outline"
+import { PhotoIcon } from "@heroicons/react/24/outline";
 // const useJoinRoom = (name, room) => {
 //   const { socket } = useWebSocket();
 //   const router = useRouter();
@@ -116,7 +115,6 @@ function ChatBox({ sendMessage, allMessages }) {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onload = () => {
-      // sendMessage({ file: reader.result, name, id: new Date() });
       sendMessage(null, name, reader.result);
     };
     reader.readAsDataURL(file);
@@ -124,7 +122,6 @@ function ChatBox({ sendMessage, allMessages }) {
 
   return (
     <section className="">
-      {/* {JSON.stringify(allMessages)} */}
       <div className="grid grid-rows-[1fr_auto] p-2.5 bg-slate-50 h-screen ">
         <div className=" flex flex-col justify-end    overflow-hidden  ">
           <ul
@@ -175,7 +172,7 @@ function SingleMessage({ msg, name }) {
       <div
         className={`flex gap-1 ${msg.name === name ? "" : "flex-row-reverse"}`}
       >
-        <motion.div
+        <div
           style={{
             originX: msg.name === name ? "1" : "0",
           }}
@@ -184,52 +181,26 @@ function SingleMessage({ msg, name }) {
               ? "ml-auto bg-slate-100"
               : msg.name === "admin"
               ? "mx-auto bg-indigo-100"
-              : "mr-auto border "
+              : "mr-auto bg-white border "
           } `}
-          layout
-          initial={{
-            opacity: 0,
-            scale: 0.8,
-          }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-          }}
-          exit={{
-            opacity: 0,
-            scale: 0.8,
-          }}
-          transition={{
-            opacity: {
-              duration: 0.2,
-            },
-            layout: {
-              type: "spring",
-              bounce: 0.4,
-            },
-          }}
         >
           <div className="pl-4 pt-2 pr-10 pb-6  relative text-sm">
-          {
-            msg.file && <img src={msg.file} alt="" className="w-40" />
-          }
+            {msg.file && <img src={msg.file} alt="" className="w-40" />}
             <span>{msg.message}</span>
             <span className="absolute bottom-1 right-2 text-gray-400 font-medium text-xs">
               {dayjs(msg.timestamp).format("hh:mm a")}
             </span>
           </div>
-        </motion.div>
-        <AnimatePresence>
-          {msg.name !== "admin" && (
-            <motion.span
-              layout
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <Avatar name={msg.name} />
-            </motion.span>
-          )}
-        </AnimatePresence>
+        </div>
+        {msg.name !== "admin" && (
+          <span
+            layout
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <Avatar name={msg.name} />
+          </span>
+        )}
       </div>
     </li>
   );
