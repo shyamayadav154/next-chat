@@ -57,6 +57,13 @@ const handler = nc({
         io.to(user.room).emit("receive-message", msg);
       });
 
+    //   socket.on('typing', (data) => {
+    //     const user = getUser(socket.id);
+    //     console.log('server typing data: ', data)
+    //     socket.broadcast.to(user.room).emit('typing-data', data);
+    //     });
+
+
       socket.on("disconnect", () => {
         const user = removeUser(socket.id);
         if (user) {

@@ -3,7 +3,8 @@ import dayjs from "dayjs";
 import Head from "next/head";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-
+import { AnimatePresence, motion } from "framer-motion";
+import useScrollOnMessage from "@/hooks/useScrollOnMessage";
 // const useJoinRoom = (name, room) => {
 //   const { socket } = useWebSocket();
 //   const router = useRouter();
@@ -86,10 +87,16 @@ function ChatSidebar({ roomData }) {
   );
 }
 
+function sortByDate(a, b) {
+    console.log(a,b,'so')
+  return new Date(a.timestamp) - new Date(b.timestamp);
+}
 function ChatBox({ sendMessage, allMessages }) {
   const searchParams = useSearchParams();
   const name = searchParams.get("name");
   const [input, setInput] = useState("");
+  const messageRef = useRef(null)
+  useScrollOnMessage(messageRef, allMessages)
   const onChangeHandler = (e) => {
     setInput(e.target.value);
   };
@@ -103,8 +110,8 @@ function ChatBox({ sendMessage, allMessages }) {
     <section className="">
       {/* {JSON.stringify(allMessages)} */}
       <div className="grid grid-rows-[1fr_auto] p-2.5 bg-slate-50 h-screen">
-        <ul className=" py-5 space-y-4 overflow-y-auto ">
-          {allMessages?.map((msg, i) => (
+        <ul ref={messageRef} className=" py-5 overflow-y-auto justify-end flex flex-col gap-2.5">
+          {allMessages?.sort(sortByDate).map((msg, i) => (
             <SingleMessage name={name} msg={msg} key={i} />
           ))}
         </ul>
@@ -126,11 +133,14 @@ function ChatBox({ sendMessage, allMessages }) {
 
 function SingleMessage({ msg, name }) {
   return (
-    <li className="">
+    <li>
       <div
         className={`flex gap-1 ${msg.name === name ? "" : "flex-row-reverse"}`}
       >
-        <div
+        <motion.div
+          style={{
+            originX: msg.name === name ? "1" : "0",
+          }}
           className={`border rounded-lg ${
             msg.name === name
               ? "ml-auto bg-slate-100"
@@ -138,6 +148,28 @@ function SingleMessage({ msg, name }) {
               ? "mx-auto bg-indigo-100"
               : "mr-auto border "
           } `}
+          layout
+          initial={{
+            opacity: 0,
+            scale: 0.8,
+          }}
+          animate={{
+            opacity: 1,
+            scale: 1,
+          }}
+          exit={{
+            opacity: 0,
+            scale: 0.8,
+          }}
+          transition={{
+            opacity: {
+              duration: 0.2,
+            },
+            layout: {
+              type: "spring",
+              bounce: 0.4,
+            },
+          }}
         >
           <div className="pl-4 pt-2 pr-10 pb-6  relative text-sm">
             <span>{msg.message}</span>
@@ -145,8 +177,18 @@ function SingleMessage({ msg, name }) {
               {dayjs(msg.timestamp).format("hh:mm a")}
             </span>
           </div>
-        </div>
-        {msg.name !== "admin" && <Avatar name={msg.name} />}
+        </motion.div>
+        <AnimatePresence>
+          {msg.name !== "admin" && (
+            <motion.span
+              layout
+              initial={{ opacity: 0,y:10 }}
+              animate={{ opacity: 1,y:0 }}
+            >
+              <Avatar name={msg.name} />
+            </motion.span>
+          )}
+        </AnimatePresence>
       </div>
     </li>
   );

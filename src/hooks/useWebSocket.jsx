@@ -9,6 +9,7 @@ const useWebSocket = () => {
   const [message, setMessage] = useState("");
   const [roomData, setRoomData] = useState([]);
   const router = useRouter();
+//   const [typingData, setTypingData] = useState([]);
 
   // initialize socket
   useEffect(() => {
@@ -47,17 +48,31 @@ const useWebSocket = () => {
         setRoomData(roomData);
     });
 
+    // socket.on('typing-data', (data) => {
+    //     console.log(data, 'typing data');
+    //     setTypingData([data]);
+    // })
 
+    
+    
     return () => {
-      socket.disconnect();
+        socket.disconnect();
     };
   }, [socket]);
+  
 
   const socketInitializer = async () => {
     await fetch("/api/socket");
     // socket = io();
     setSocket(io());
   };
+
+    // function sendTypingData(data,stop=false) {
+    //   if (!socket) return;
+    //   if(stop) return socket.emit('typing', {});
+    //  console.log('data typing', data)
+    //   socket.emit("typing", data);
+    // }
 
   function sendMessage(message,name) {
     if (!socket) return;
