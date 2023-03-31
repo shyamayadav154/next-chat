@@ -88,15 +88,15 @@ function ChatSidebar({ roomData }) {
 }
 
 function sortByDate(a, b) {
-    console.log(a,b,'so')
+  console.log(a, b, "so");
   return new Date(a.timestamp) - new Date(b.timestamp);
 }
 function ChatBox({ sendMessage, allMessages }) {
   const searchParams = useSearchParams();
   const name = searchParams.get("name");
   const [input, setInput] = useState("");
-  const messageRef = useRef(null)
-  useScrollOnMessage(messageRef, allMessages)
+  const messageRef = useRef(null);
+  useScrollOnMessage(messageRef, allMessages);
   const onChangeHandler = (e) => {
     setInput(e.target.value);
   };
@@ -109,8 +109,11 @@ function ChatBox({ sendMessage, allMessages }) {
   return (
     <section className="">
       {/* {JSON.stringify(allMessages)} */}
-      <div className="grid grid-rows-[1fr_auto] p-2.5 bg-slate-50 h-screen">
-        <ul ref={messageRef} className=" py-5 overflow-y-auto justify-end flex flex-col gap-2.5">
+      <div className="grid grid-rows-[1fr_auto] p-2.5 bg-slate-50 h-screen ">
+        <ul
+          ref={messageRef}
+          className="scrollbar-thin  py-5 mt-auto overflow-y-auto h-[calc(100vh-50px)]  flex flex-col gap-2.5"
+        >
           {allMessages?.sort(sortByDate).map((msg, i) => (
             <SingleMessage name={name} msg={msg} key={i} />
           ))}
@@ -182,8 +185,8 @@ function SingleMessage({ msg, name }) {
           {msg.name !== "admin" && (
             <motion.span
               layout
-              initial={{ opacity: 0,y:10 }}
-              animate={{ opacity: 1,y:0 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
             >
               <Avatar name={msg.name} />
             </motion.span>
