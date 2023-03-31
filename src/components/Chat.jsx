@@ -110,14 +110,13 @@ function ChatBox({ sendMessage, allMessages }) {
     <section className="">
       {/* {JSON.stringify(allMessages)} */}
       <div className="grid grid-rows-[1fr_auto] p-2.5 bg-slate-50 h-screen ">
-        <ul
-          ref={messageRef}
-          className="scrollbar-thin  py-5 mt-auto overflow-y-auto h-[calc(100vh-50px)]  flex flex-col gap-2.5"
-        >
-          {allMessages?.sort(sortByDate).map((msg, i) => (
-            <SingleMessage name={name} msg={msg} key={i} />
-          ))}
-        </ul>
+        <div className=" flex flex-col justify-end    overflow-hidden  ">
+          <ul className="overflow-y-auto scrollbar-thin py-5 space-y-2.5" ref={messageRef}>
+            {allMessages?.sort(sortByDate).map((msg, i) => (
+              <SingleMessage name={name} msg={msg} key={i} />
+            ))}
+          </ul>
+        </div>
         <form onSubmit={onSubmitHandler} className="flex gap-2">
           <input
             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
