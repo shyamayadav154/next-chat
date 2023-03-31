@@ -1,3 +1,4 @@
+import Chat from "@/components/Chat";
 import FormInput from "@/components/FormInput";
 import useWebSocket from "@/hooks/useWebSocket";
 import Head from "next/head";
@@ -5,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import Chat from "./chat";
+// import Chat from "./chat";
 
 export default function Home() {
   const searchParams = useSearchParams();

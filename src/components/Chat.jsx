@@ -36,14 +36,14 @@ function Chat({ sendMessage, allMessages, joinRoom, roomData }) {
   }, []);
   return (
     <>
-    <Head>
+      <Head>
         <title>Chat</title>
-    </Head>
+      </Head>
 
-    <main className="grid grid-cols-[200px_1fr]">
-      <ChatSidebar roomData={roomData} />
-      <ChatBox allMessages={allMessages} sendMessage={sendMessage} />
-    </main>
+      <main className="grid grid-cols-[200px_1fr]">
+        <ChatSidebar roomData={roomData} />
+        <ChatBox allMessages={allMessages} sendMessage={sendMessage} />
+      </main>
     </>
   );
 }
@@ -51,21 +51,31 @@ function Chat({ sendMessage, allMessages, joinRoom, roomData }) {
 export default Chat;
 
 function ChatSidebar({ roomData }) {
+  const searchParams = useSearchParams();
+  const name = searchParams.get("name");
   if (!roomData) return null;
   return (
-    <section className="bg-indigo-600 text-white h-screen py-2.5 space-y-1">
-      <div className="pl-1 text-sm">
-        You are in room <span className="font-bold">{roomData?.room}</span>
+    <section className="bg-indigo-600 text-white h-screen pb-2.5 space-y-1">
+      <div className="pl-1 text-sm py-5 bg-indigo-900">
+        <div className="text-xs font-medium text-indigo-200">Room</div>
+        <div className="font-bold text-2xl">{roomData?.room}</div>
       </div>
       <article className="">
-        <div className="pl-1 text-sm">User(s) present in room:</div>
+        <div className="pl-1 text-2xl font-bold">Users</div>
         <div>
-          <ul className="space-y-1 ">
+          <ul className="space-y-1 text-sm flex flex-col-reverse">
             {roomData?.users?.map((user, i) => {
               return (
-                <li className="py-1.5 bg-indigo-500 mx-1 mt-1 rounded px-2" key={i}>
+                <li
+                  className={`py-1.5 font-medium  ${
+                    user.name === name ? "bg-indigo-700 " : "text-indigo-200"
+                  } mx-1 mt-1 rounded px-2`}
+                  key={i}
+                >
                   <Avatar name={user.name} />
-                  <span className="ml-2">{user.name}</span>
+                  <span className="ml-2 capitalize">
+                    {user.name} {user.name === name && "(Me)"}{" "}
+                  </span>
                 </li>
               );
             })}
@@ -92,8 +102,8 @@ function ChatBox({ sendMessage, allMessages }) {
   return (
     <section className="">
       {/* {JSON.stringify(allMessages)} */}
-      <div className="grid grid-rows-[1fr_auto] p-2.5 h-screen">
-        <ul className=" py-5 space-y-4 overflow-y-auto">
+      <div className="grid grid-rows-[1fr_auto] p-2.5 bg-slate-50 h-screen">
+        <ul className=" py-5 space-y-4 overflow-y-auto ">
           {allMessages?.map((msg, i) => (
             <SingleMessage name={name} msg={msg} key={i} />
           ))}
