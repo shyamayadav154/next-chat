@@ -5,17 +5,9 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import useScrollOnMessage from "@/hooks/useScrollOnMessage";
 import { PhotoIcon } from "@heroicons/react/24/outline";
-// const useJoinRoom = (name, room) => {
-//   const { socket } = useWebSocket();
-//   const router = useRouter();
-//   useEffect(() => {
-//     if(!socket) return;
-//     if (!room || !name) {
-//      return router.push("/");
-//     }
-//     socket.emit("join-room", { name, room });
-//   }, [name, room,socket]);
-// };
+import { motion, AnimatePresence } from "framer-motion";
+import clsx from "clsx";
+
 
 function Chat({ sendMessage, allMessages, joinRoom, roomData, uploadImage }) {
   const searchParams = useSearchParams();
@@ -23,9 +15,7 @@ function Chat({ sendMessage, allMessages, joinRoom, roomData, uploadImage }) {
   const room = searchParams.get("room");
 
   const hasMounted = useRef(null);
-  //   useJoinRoom(room, name);
 
-  //   const { socket } = useWebSocket();
   useEffect(() => {
     if (!hasMounted.current) {
       hasMounted.current = true;
@@ -122,7 +112,7 @@ function ChatBox({ sendMessage, allMessages }) {
 
   return (
     <section className="">
-      <div className="grid grid-rows-[1fr_auto] p-2.5 bg-slate-50 h-screen ">
+      <div className="grid grid-rows-[1fr_auto] p-2.5  h-screen ">
         <div className=" flex flex-col justify-end    overflow-hidden  ">
           <ul
             className="overflow-y-auto scrollbar-thin py-5 space-y-2.5"
@@ -166,23 +156,37 @@ function ChatBox({ sendMessage, allMessages }) {
   );
 }
 
+const singleMessageVariants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.8,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+  },
+};
+
 function SingleMessage({ msg, name }) {
+  const isAdmin = msg.name === "admin";
+  const isMe = msg.name === name;
   return (
     <li>
-      <div
-        className={`flex gap-1 ${msg.name === name ? "" : "flex-row-reverse"}`}
-      >
-        <div
+      <div className={`flex gap-1 ${isMe ? "" : "flex-row-reverse"}`}>
+        <motion.div
           style={{
             originX: msg.name === name ? "1" : "0",
           }}
-          className={`border rounded-lg ${
-            msg.name === name
-              ? "ml-auto bg-slate-100"
-              : msg.name === "admin"
-              ? "mx-auto bg-indigo-100"
-              : "mr-auto bg-white border "
-          } `}
+          className={clsx("border rounded-lg", {
+            "ml-auto bg-slate-100": isMe,
+            "mx-auto bg-indigo-100": isAdmin,
+            "mr-auto border bg-white": !isMe && !isAdmin,
+          })}
+          layout
+          variants={singleMessageVariants}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
         >
           <div className="pl-4 pt-2 pr-10 pb-6  relative text-sm">
             {msg.file && <img src={msg.file} alt="" className="w-40" />}
@@ -191,16 +195,17 @@ function SingleMessage({ msg, name }) {
               {dayjs(msg.timestamp).format("hh:mm a")}
             </span>
           </div>
-        </div>
-        {msg.name !== "admin" && (
-          <span
-            layout
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <Avatar name={msg.name} />
-          </span>
-        )}
+        </motion.div>
+        <AnimatePresence>
+          {!isAdmin && (
+            <motion.span
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <Avatar name={msg.name} />
+            </motion.span>
+          )}
+        </AnimatePresence>
       </div>
     </li>
   );

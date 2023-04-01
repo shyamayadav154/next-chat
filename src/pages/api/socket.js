@@ -41,6 +41,7 @@ const handler = nc({
           id: socket.id,
           name: "admin",
           message: `${user.name} has joined the room`,
+          timestamp: new Date(),
         });
 
         io.to(user.room).emit("room-data", {

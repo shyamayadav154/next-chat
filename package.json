@@ -10,12 +10,15 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.17",
+    "clsx": "^1.2.1",
     "cors": "^2.8.5",
     "dayjs": "^1.11.7",
+    "framer-motion": "^10.10.0",
     "next": "13.2.4",
     "next-connect": "^0.13.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-use": "^17.4.0",
     "socket.io": "^4.6.1",
     "socket.io-client": "^4.6.1"
   },
