@@ -179,7 +179,7 @@ function SingleMessage({ msg, name }) {
   const isAdmin = msg.name === "admin";
   const isMe = msg.name === name;
   return (
-    <li>
+    <motion.li layout>
       <div className={`flex gap-1 ${isMe ? "" : "flex-row-reverse"}`}>
         <motion.div
           style={{
@@ -190,7 +190,7 @@ function SingleMessage({ msg, name }) {
             "mx-auto bg-indigo-100": isAdmin,
             "mr-auto border bg-white": !isMe && !isAdmin,
           })}
-          layout
+          
           variants={singleMessageVariants}
           initial="hidden"
           animate="visible"
@@ -214,6 +214,6 @@ function SingleMessage({ msg, name }) {
           )}
         </AnimatePresence>
       </div>
-    </li>
+    </motion.li>
   );
 }
