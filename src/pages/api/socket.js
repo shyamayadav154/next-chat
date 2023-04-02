@@ -28,7 +28,7 @@ const handler = nc({
     res.socket.server.io = io;
 
     io.on("connection", (socket) => {
-      socket.on("join-room", ({ name, room }, callback) => {
+      socket.on("join-room", ({ name, room,timestamp }, callback) => {
         const { user, error } = addUser({ id: socket.id, name, room });
 
         if (error) {
@@ -41,7 +41,7 @@ const handler = nc({
           id: socket.id,
           name: "admin",
           message: `${user.name} has joined the room`,
-          timestamp: new Date(),
+          timestamp,
         });
 
         io.to(user.room).emit("room-data", {
@@ -55,10 +55,7 @@ const handler = nc({
       socket.on("send-message", (msg) => {
         const user = getUser(socket.id);
         console.log("Received message", msg);
-        io.to(user.room).emit("receive-message", {
-          ...msg,
-          timestamp: new Date(),
-        });
+        io.to(user.room).emit("receive-message", msg);
       });
 
       socket.on('upload-image',data=>{

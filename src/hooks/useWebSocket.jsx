@@ -97,7 +97,7 @@ useEffect(()=>{
     console.log(count++);
     if (!socket) return;
 
-    socket.emit("join-room", { name, room }, (error) => {
+    socket.emit("join-room", { name, room,timestamp:new Date() }, (error) => {
       if (error) {
         alert(error);
       router.push('/')
