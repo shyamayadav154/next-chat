@@ -55,7 +55,10 @@ const handler = nc({
       socket.on("send-message", (msg) => {
         const user = getUser(socket.id);
         console.log("Received message", msg);
-        io.to(user.room).emit("receive-message", msg);
+        io.to(user.room).emit("receive-message", {
+          ...msg,
+          timestamp: new Date(),
+        });
       });
 
       socket.on('upload-image',data=>{
