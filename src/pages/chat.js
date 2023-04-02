@@ -183,14 +183,14 @@ function SingleMessage({ msg, name }) {
       <div className={`flex gap-1 ${isMe ? "" : "flex-row-reverse"}`}>
         <motion.div
           style={{
-            originX: msg.name === name ? "1" : "0",
+            originX: isMe ? "1" : isAdmin ? "" : "0",
           }}
           className={clsx("border rounded-lg", {
             "ml-auto bg-slate-100": isMe,
             "mx-auto bg-indigo-100": isAdmin,
             "mr-auto border bg-white": !isMe && !isAdmin,
           })}
-          layoutId={msg?.id}
+          layout
           variants={singleMessageVariants}
           initial="hidden"
           animate="visible"
