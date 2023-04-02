@@ -24,6 +24,7 @@ useEffect(()=>{
     if(!socket) return;
     if(!name || !room) return;
     joinRoom(name,room)
+// eslint-disable-next-line react-hooks/exhaustive-deps
 },[socket,name,room])
   
 

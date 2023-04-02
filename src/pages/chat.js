@@ -190,11 +190,10 @@ function SingleMessage({ msg, name }) {
             "mx-auto bg-indigo-100": isAdmin,
             "mr-auto border bg-white": !isMe && !isAdmin,
           })}
-          layout
+          layoutId={msg?.id}
           variants={singleMessageVariants}
           initial="hidden"
           animate="visible"
-          exit="hidden"
         >
           <div className="pl-4 pt-2 pr-10 pb-6  relative text-sm">
             {msg.file && <img src={msg.file} alt="" className="w-40" />}
