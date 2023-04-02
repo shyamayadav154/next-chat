@@ -1,55 +1,10 @@
-import Chat from "@/components/Chat";
 import FormInput from "@/components/FormInput";
-import useWebSocket from "@/hooks/useWebSocket";
 import Head from "next/head";
-import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 export default function Home() {
-  const searchParams = useSearchParams();
-  const name = searchParams.get("name");
-  const room = searchParams.get("room");
-  const hasMounted = useRef(null);
-
-  //  useCallback(() => {
-  //     if (!name || !room) return;
-  //     joinRoom(name, room);
-  //   }, [name, room]);
-
-  const {
-    sendMessage,
-    joinRoom,
-    allMessages,
-    roomMessages,
-    roomData,
-    uploadImage,
-  } = useWebSocket();
-
-  useEffect(() => {
-    if (hasMounted.current) return;
-    if (!name || !room) return;
-    joinRoom(name, room);
-    hasMounted.current = true;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  if (!name || !room) {
-    return <JoinRoomForm />;
-  }
-
-  // joinRoom(name, room);
-
-  return (
-    <Chat
-      sendMessage={sendMessage}
-      joinRoom={joinRoom}
-      roomMessages={roomMessages}
-      allMessages={allMessages}
-      roomData={roomData}
-      uploadImage={uploadImage}
-    />
-  );
+  return <JoinRoomForm />;
 }
 
 function JoinRoomForm() {
@@ -61,7 +16,7 @@ function JoinRoomForm() {
     if (!name) return alert("Please enter a name");
     if (!room) return alert("Please enter a room");
     // joinRoom(name,room)
-    router.push(`/?name=${name}&room=${room}`, undefined, { shallow: true });
+    router.push(`/chat?name=${name}&room=${room}`);
   }
 
   return (

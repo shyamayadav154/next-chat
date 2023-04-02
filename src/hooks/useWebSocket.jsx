@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
 
-const useWebSocket = () => {
+const useWebSocket = (name,room) => {
   const [socket, setSocket] = useState(null);
   const [allMessages, setAllMessages] = useState([]);
   const [roomMessages, setRoomMessages] = useState([]);
@@ -19,6 +19,13 @@ const useWebSocket = () => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+useEffect(()=>{
+    if(!socket) return;
+    if(!name || !room) return;
+    joinRoom(name,room)
+},[socket,name,room])
+  
 
   // socket events inside
   useEffect(() => {
