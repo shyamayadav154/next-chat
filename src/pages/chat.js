@@ -126,8 +126,8 @@ function ChatBox({ sendMessage, allMessages }) {
             className="overflow-y-auto scrollbar-thin py-5 space-y-2.5"
             ref={messageRef}
           >
-            {allMessages?.sort(sortByDate).map((msg, i) => (
-              <SingleMessage name={name} msg={msg} key={i} />
+            {allMessages?.sort(sortByDate).map((msg) => (
+              <SingleMessage name={name} msg={msg} key={msg.timestamp} />
             ))}
           </ul>
         </div>
